@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Kitten Yang. All rights reserved.
 //
 
-#define pathPadding 10
+#define pathPadding 30
 
 #import "KYWaterWaveView.h"
 
 
 
-@interface KYWaterWaveView()
+@interface KYWaterWaveView()<UICollisionBehaviorDelegate>
 
 
 @end
@@ -30,6 +30,7 @@
     CAShapeLayer *waveBoundaryLayer;
     
     UIView *fish;
+    UIView *boot;
     UIDynamicAnimator *animator;
     UIPushBehavior *push;
     UIGravityBehavior * grav;
@@ -80,11 +81,13 @@
     [waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     
-    fish = [[UIView alloc]initWithFrame:CGRectMake(waterWaveWidth - pathPadding - 30,waterWaveHeight - 30, 30, 30)];
+    fish = [[UIView alloc]initWithFrame:CGRectMake(waterWaveWidth - pathPadding - 30,waterWaveHeight - 50, 30, 30)];
+    fish.tag = 101;
     fish.backgroundColor = [UIColor redColor];
     [self addSubview:fish];
     
-    UIView *boot = [[UIView alloc]initWithFrame:CGRectMake(25,5 ,20,20 )];
+    boot = [[UIView alloc]initWithFrame:CGRectMake(25,5 ,20,20 )];
+    boot.tag = 100;
     boot.backgroundColor = [UIColor purpleColor];
     [self addSubview:boot];
     
@@ -107,25 +110,24 @@
     fishAnim.path = trackPath.CGPath;
 //    fishAnim.repeatCount = HUGE_VALF;
     fishAnim.rotationMode = kCAAnimationRotateAutoReverse;
-    fishAnim.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.1 :0.3 :0.9:0.7];
-    fishAnim.duration = 0.5;
+//    fishAnim.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.1 :0.4 :0.9:0.6];
+    fishAnim.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.3 :0.7 :0.7 :0.3];
+    fishAnim.duration = 1;
     fishAnim.delegate = self;
     [fish.layer addAnimation:fishAnim forKey:@"fishAnim"];
     
     
     animator = [[UIDynamicAnimator alloc]initWithReferenceView:self];
     
-    NSArray *items = @[fish,boot];
+    NSArray *bootItem = @[boot];
 
-    grav = [[UIGravityBehavior alloc]initWithItems:items];
+    grav = [[UIGravityBehavior alloc]initWithItems:bootItem];
     [animator addBehavior:grav];
     
-    coll = [[UICollisionBehavior alloc]initWithItems:items];
+    coll = [[UICollisionBehavior alloc]initWithItems:bootItem];
+    coll.collisionDelegate = self;
     [animator addBehavior:coll];
     
-    
-    
-
 }
 
 -(void)getCurrentWave:(CADisplayLink *)displayLink{
@@ -167,6 +169,26 @@
 
 -(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
     [fish.layer removeAllAnimations];
+    [coll addItem:fish];
+    [grav addItem:fish];
+}
+
+- (void)collisionBehavior:(UICollisionBehavior*)behavior beganContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(id <NSCopying>)identifier atPoint:(CGPoint)p{
+   
+    UIView *view = (UIView *)item;
+    if (view.tag == 101) {
+        view.backgroundColor = [UIColor yellowColor];
+        [UIView animateWithDuration:0.2 animations:^{
+            view.backgroundColor = [UIColor redColor];
+        }];
+    }
+}
+
+- (void)collisionBehavior:(UICollisionBehavior*)behavior endContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(id <NSCopying>)identifier atPoint:(CGPoint)p{
+    
+    if ([item isEqual:fish] && (p.x > waterWaveWidth *2/ 3 )){
+        fish.backgroundColor = [UIColor redColor];
+    }
 }
 
 @end
