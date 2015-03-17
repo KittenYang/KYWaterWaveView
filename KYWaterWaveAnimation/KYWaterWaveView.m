@@ -75,7 +75,7 @@
     waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(getCurrentWave:)];
     [waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
-    boot = [[UIImageView alloc]initWithFrame:CGRectMake(20,10 ,20,20 )];
+    boot = [[UIImageView alloc]initWithFrame:CGRectMake(20,12 ,20,20 )];
     boot.tag = 100;
     boot.backgroundColor = [UIColor clearColor];
     boot.image = [UIImage imageNamed:@"ship"];
