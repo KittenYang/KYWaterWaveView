@@ -181,6 +181,7 @@
 				TargetAttributes = {
 					5FA24B481AB70773000E79BF = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = Y6BM76G9E8;
 					};
 					5FA24B611AB70773000E79BF = {
 						CreatedOnToolsVersion = 6.2;
@@ -357,11 +358,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Xinyu Li (XWYND9KE57)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = KYWaterWaveAnimation/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -369,10 +371,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = KYWaterWaveAnimation/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -429,6 +433,7 @@
 				5FA24B6E1AB70773000E79BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5FA24B6F1AB70773000E79BF /* Build configuration list for PBXNativeTarget "KYWaterWaveAnimationTests" */ = {
 			isa = XCConfigurationList;
@@ -437,6 +442,7 @@
 				5FA24B711AB70773000E79BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
