@@ -8,12 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef MB_STRONG
+#if __has_feature(objc_arc)
+    #define MB_STRONG strong
+#else
+    #define MB_STRONG retain
+#endif
+#endif
+
 @interface KYWaterWaveView : UIView
 
-@property (nonatomic,assign)CGFloat waveSpeed;     // Default as 6
-@property (nonatomic,assign)CGFloat waveAmplitude; // Default as 6
-
-@property (nonatomic, strong) UIColor   *waveColor; // Default as [UIColor blueColor]
+@property (nonatomic, assign) CGFloat waveSpeed;     // Default as 6
+@property (nonatomic, assign) CGFloat waveAmplitude; // Default as 6
+@property (nonatomic, MB_STRONG) UIColor   *waveColor; // Default as [UIColor blueColor]
 
 - (void)wave;
 - (void)stop;
