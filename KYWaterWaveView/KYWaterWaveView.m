@@ -84,6 +84,7 @@
 }
 
 - (void)stop {
+    [_waveLayer removeFromSuperlayer];
     [_waveDisplaylink invalidate];
     _waveDisplaylink = nil;
 }
