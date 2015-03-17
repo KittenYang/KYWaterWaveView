@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Kitten Yang. All rights reserved.
 //
 
+#define pathPadding 10
+
 #import "KYWaterWaveView.h"
+
 
 
 @interface KYWaterWaveView()
@@ -15,6 +18,8 @@
 @end
 
 @implementation KYWaterWaveView{
+    CALayer *l;
+    
     CGFloat waterWaveHeight;
     CGFloat waterWaveWidth;
     CGFloat offsetX;
@@ -75,13 +80,19 @@
     [waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     
-    fish = [[UIView alloc]initWithFrame:CGRectMake(0, waterWaveHeight, 30, 30)];
+    fish = [[UIView alloc]initWithFrame:CGRectMake(waterWaveWidth - pathPadding - 30,waterWaveHeight - 30, 30, 30)];
     fish.backgroundColor = [UIColor redColor];
     [self addSubview:fish];
     
+    UIView *boot = [[UIView alloc]initWithFrame:CGRectMake(25,5 ,20,20 )];
+    boot.backgroundColor = [UIColor purpleColor];
+    [self addSubview:boot];
+    
+    
     UIBezierPath *trackPath = [UIBezierPath bezierPath];
-    [trackPath moveToPoint:CGPointMake(0, waterWaveHeight)];
-    [trackPath addQuadCurveToPoint:CGPointMake(waterWaveWidth, waterWaveHeight) controlPoint:CGPointMake(waterWaveWidth / 2, waterWaveHeight / 2 + 10)];
+    CGPoint startP = CGPointMake(pathPadding+fish.frame.size.width / 2, fish.center.y);
+    [trackPath moveToPoint:startP];
+    [trackPath addQuadCurveToPoint:fish.center controlPoint:CGPointMake((fish.center.x - startP.x) / 2 + startP.x, fish.center.y -30)];
     
     
     CAShapeLayer *trackLayer = [CAShapeLayer layer];
@@ -94,29 +105,25 @@
     
     CAKeyframeAnimation *fishAnim = [CAKeyframeAnimation animationWithKeyPath:@"position"];
     fishAnim.path = trackPath.CGPath;
-    fishAnim.autoreverses = YES;
-    fishAnim.repeatCount = HUGE_VALF;
+//    fishAnim.repeatCount = HUGE_VALF;
     fishAnim.rotationMode = kCAAnimationRotateAutoReverse;
     fishAnim.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.1 :0.3 :0.9:0.7];
-    fishAnim.duration = 1;
-    [fish.layer addAnimation:fishAnim forKey:@"fish"];
+    fishAnim.duration = 0.5;
+    fishAnim.delegate = self;
+    [fish.layer addAnimation:fishAnim forKey:@"fishAnim"];
     
     
     animator = [[UIDynamicAnimator alloc]initWithReferenceView:self];
     
-    NSArray *items = @[fish];
-//    push= [[UIPushBehavior alloc]initWithItems:items mode:UIPushBehaviorModeInstantaneous];
-//    push.pushDirection = CGVectorMake(0.5, -0.5);
-//    
-//    UIDynamicItemBehavior *item = [[UIDynamicItemBehavior alloc]initWithItems:items];
-//    item.resistance = 1;
-//    item.density = 1000;
-//    grav = [[UIGravityBehavior alloc]initWithItems:items];
-//    [animator addBehavior:push];
-//    [animator addBehavior:grav];
+    NSArray *items = @[fish,boot];
+
+    grav = [[UIGravityBehavior alloc]initWithItems:items];
+    [animator addBehavior:grav];
     
     coll = [[UICollisionBehavior alloc]initWithItems:items];
     [animator addBehavior:coll];
+    
+    
     
 
 }
@@ -128,8 +135,9 @@
     waveLayer.path = [self getgetCurrentWavePath];
     waveBoundaryPath.CGPath = waveLayer.path;
     
-    [coll addBoundaryWithIdentifier:@"waveBoundary" forPath:waveBoundaryPath];
     waveBoundaryLayer.path = waveBoundaryPath.CGPath;
+    [coll addBoundaryWithIdentifier:@"waveBoundary" forPath:waveBoundaryPath];
+    
 }
 
 -(CGPathRef)getgetCurrentWavePath{
@@ -157,5 +165,8 @@
     waveDisplaylink = nil;
 }
 
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    [fish.layer removeAllAnimations];
+}
 
 @end

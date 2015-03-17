@@ -29,8 +29,7 @@
 //    waterView.waveAmplitude = 3.0f;
 //    [waterView wave];
     
-    self.waterViewXib.layer.cornerRadius = self.waterViewXib.frame.size.width / 2;
-    NSLog(@"width:%f",self.waterViewXib.frame.size.width);
+//    self.waterViewXib.layer.cornerRadius = self.waterViewXib.frame.size.width / 2;
     self.waterViewXib.waveSpeed = 6.0f;
     self.waterViewXib.waveAmplitude = 6.0f;
     [self.waterViewXib wave];
@@ -39,6 +38,9 @@
 
 
 
+- (IBAction)startWave:(id)sender {
+    [self.waterViewXib wave];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
