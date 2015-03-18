@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary      = "Smooth wave animation view for iOS in Objective-C."
   s.homepage     = "https://github.com/KittenYang/KYWaterWaveView"
   s.license      = 'MIT'
-  s.author       = { "0dayZh" => "0day.zh@gmail.com" }
+  s.author       = { "KittenYang" => "kittenyang@icloud.com" }
   s.ios.deployment_target = '7.0'
   s.source       = { :git => "https://github.com/KittenYang/KYWaterWaveView.git", :tag => s.version }
 
