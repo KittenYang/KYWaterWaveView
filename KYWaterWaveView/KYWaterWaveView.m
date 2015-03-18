@@ -15,76 +15,78 @@
 @end
 
 @implementation KYWaterWaveView{
-    CGFloat waterWaveHeight;
-    CGFloat waterWaveWidth;
-    CGFloat offsetX;
+    CGFloat _waterWaveHeight;
+    CGFloat _waterWaveWidth;
+    CGFloat _offsetX;
     
-    CADisplayLink *waveDisplaylink;
-    CAShapeLayer  *waveLayer;
+    CADisplayLink *_waveDisplaylink;
+    CAShapeLayer  *_waveLayer;
     
 }
 
--(id)initWithFrame:(CGRect)frame{
+- (void)_initWithFrame:(CGRect)frame {
+    self.backgroundColor = [UIColor clearColor];
+    self.layer.masksToBounds  = YES;
+    _waterWaveHeight = frame.size.height / 2;
+    _waterWaveWidth  = frame.size.width;
+    
+    self.waveAmplitude = 6;
+    self.waveSpeed = 6;
+    self.waveColor = [UIColor blueColor];
+}
+
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        self.backgroundColor = [UIColor clearColor];
-        self.layer.masksToBounds  = YES;
-        waterWaveHeight = frame.size.height / 2;
-        waterWaveWidth  = frame.size.width;
-
+        [self _initWithFrame:frame];
     }
     
     return self;
 }
 
--(id)initWithCoder:(NSCoder *)aDecoder{
+- (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        self.layer.masksToBounds  = YES;
-        waterWaveHeight = self.frame.size.height / 2;
-        waterWaveWidth  = self.frame.size.width;
-
+        [self _initWithFrame:self.frame];
     }
+    
     return self;
 }
 
--(void) wave{
-    waveLayer = [CAShapeLayer layer];
-    waveLayer.fillColor = [UIColor colorWithRed:0 green:0.722 blue:1 alpha:1].CGColor;
-    [self.layer addSublayer:waveLayer];
-    waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(getCurrentWave:)];
-    [waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+- (void)wave {
+    _waveLayer = [CAShapeLayer layer];
+    _waveLayer.fillColor = self.waveColor.CGColor;
+    [self.layer addSublayer:_waveLayer];
+    _waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(getCurrentWave:)];
+    [_waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
 }
 
--(void)getCurrentWave:(CADisplayLink *)displayLink{
-    
-    offsetX += self.waveSpeed;
-    waveLayer.path = [self getgetCurrentWavePath];
+- (void)getCurrentWave:(CADisplayLink *)displayLink {
+    _offsetX += self.waveSpeed;
+    _waveLayer.path = [self getgetCurrentWavePath];
 }
 
--(CGPathRef)getgetCurrentWavePath{
-
+- (CGPathRef)getgetCurrentWavePath {
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, nil, 0, waterWaveHeight);
+    CGPathMoveToPoint(path, nil, 0, _waterWaveHeight);
     CGFloat y = 0.0f;
-    for (float x = 0.0f; x <=  waterWaveWidth ; x++) {
-        y = self.waveAmplitude* sinf((360/waterWaveWidth) *(x * M_PI / 180) - offsetX * M_PI / 180) + waterWaveHeight;
+    for (float x = 0.0f; x <=  _waterWaveWidth ; x++) {
+        y = self.waveAmplitude* sinf((360/_waterWaveWidth) *(x * M_PI / 180) - _offsetX * M_PI / 180) + _waterWaveHeight;
         CGPathAddLineToPoint(path, nil, x, y);
     }
     
-    CGPathAddLineToPoint(path, nil, waterWaveWidth, self.frame.size.height);
+    CGPathAddLineToPoint(path, nil, _waterWaveWidth, self.frame.size.height);
     CGPathAddLineToPoint(path, nil, 0, self.frame.size.height);
     CGPathCloseSubpath(path);
     
     return path;
 }
 
--(void) stop{
-    [waveDisplaylink invalidate];
-    waveDisplaylink = nil;
+- (void)stop {
+    [_waveLayer removeFromSuperlayer];
+    [_waveDisplaylink invalidate];
+    _waveDisplaylink = nil;
 }
 
 
