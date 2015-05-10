@@ -1,5 +1,5 @@
 <p align="left" >
-  <img src="logo.png" alt="KYWaterWaveView" title="KYWaterWaveView">
+  <img src="logo_.png" alt="KYWaterWaveView" title="KYWaterWaveView">
 </p>
 
 
