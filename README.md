@@ -23,7 +23,7 @@
  You can use code or xib to create;
  Then set the properties;
  
- ```
+ ```objective-c
 @property (nonatomic, assign) CGFloat waveSpeed;     // Default as 6
 @property (nonatomic, assign) CGFloat waveAmplitude; // Default as 6
  ```
