@@ -1,10 +1,22 @@
-# KYWaterWaveView
+<p align="left" >
+  <img src="logo.png" alt="KYWaterWaveView" title="KYWaterWaveView">
+</p>
+
+
+![CocoaPods Version](https://img.shields.io/badge/pod-v1.1.0-brightgreen.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-iOS-red.svg)
+
 
 ### 一个内置波浪动画的UIView。
 #### A view with water wave animation inside.
 
 ![](water.gif)
 
+
+##Installation
+
+`pod 'KYWaterWaveView', '~> 1.1.0'`
 
 ## Usage
 
