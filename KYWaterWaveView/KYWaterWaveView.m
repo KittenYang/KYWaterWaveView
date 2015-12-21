@@ -64,7 +64,12 @@
 
 - (void)getCurrentWave:(CADisplayLink *)displayLink {
     _offsetX += self.waveSpeed;
-    _waveLayer.path = [self getgetCurrentWavePath];
+    CGPathRef path =[self getgetCurrentWavePath];
+    _waveLayer.path = path;
+    if (path != NULL) {
+        CGPathRelease(path);
+        path = NULL;
+    }
 }
 
 - (CGPathRef)getgetCurrentWavePath {
