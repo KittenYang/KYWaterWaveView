@@ -14,7 +14,7 @@
 
 @interface KYWaterWaveView()<UICollisionBehaviorDelegate>
 
-@property (nonatomic,strong)    UIImageView *fish;
+@property (nonatomic, strong) UIImageView *fish;
 
 @end
 
@@ -38,11 +38,9 @@
     UIPushBehavior *push;
     UIGravityBehavior * grav;
     UICollisionBehavior *coll;
-    
-    
 }
 
--(id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
@@ -54,7 +52,7 @@
     return self;
 }
 
--(id)initWithCoder:(NSCoder *)aDecoder{
+- (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
@@ -66,7 +64,8 @@
     return self;
 }
 
--(void) wave{
+#pragma mark - public
+- (void)wave {
     waveBoundaryPath = [UIBezierPath bezierPath];
     
     waveLayer = [CAShapeLayer layer];
@@ -81,7 +80,6 @@
     boot.image = [UIImage imageNamed:@"ship"];
     [self addSubview:boot];
     
-    
     animator = [[UIDynamicAnimator alloc]initWithReferenceView:self];
     NSArray *items = @[boot];
     grav = [[UIGravityBehavior alloc]initWithItems:items];
@@ -92,22 +90,24 @@
     [animator addBehavior:coll];
     
     [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(fishJump) userInfo:nil repeats:YES];
-    
 }
 
--(void)getCurrentWave:(CADisplayLink *)displayLink{
-    
+- (void)stop {
+    [waveDisplaylink invalidate];
+    waveDisplaylink = nil;
+}
+
+#pragma mark - helper
+- (void)getCurrentWave:(CADisplayLink *)displayLink {
     [coll removeAllBoundaries];
     offsetX += self.waveSpeed;
-    waveLayer.path = [self getgetCurrentWavePath];
-    waveBoundaryPath.CGPath = waveLayer.path;
+    waveBoundaryPath = [self getgetCurrentWavePath];
+    waveLayer.path = waveBoundaryPath.CGPath;
     
     [coll addBoundaryWithIdentifier:@"waveBoundary" forPath:waveBoundaryPath];
-
 }
 
--(CGPathRef)getgetCurrentWavePath{
-
+- (UIBezierPath *)getgetCurrentWavePath {
     UIBezierPath *p = [UIBezierPath bezierPath];
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, nil, 0, waterWaveHeight);
@@ -122,17 +122,11 @@
     CGPathCloseSubpath(path);
     
     p.CGPath = path;
-    
-    return path;
+    CGPathRelease(path);
+    return p;
 }
 
--(void) stop{
-    [waveDisplaylink invalidate];
-    waveDisplaylink = nil;
-}
-
--(void)fishJump{
-    
+- (void)fishJump {
     self.fish.hidden = NO;
     fishFirstColl = NO;
     if (self.fish == nil) {
@@ -168,11 +162,9 @@
     coll = [[UICollisionBehavior alloc]initWithItems:items];
     coll.collisionDelegate = self;
     [animator addBehavior:coll];
-
 }
 
--(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
-
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     if (anim == [dropView.layer animationForKey:@"dropAnim"]) {
         [dropView.layer removeAllAnimations];
         [dropView2.layer removeAllAnimations];
@@ -187,17 +179,16 @@
     }
 }
 
-- (void)collisionBehavior:(UICollisionBehavior*)behavior beganContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(id <NSCopying>)identifier atPoint:(CGPoint)p{
+- (void)collisionBehavior:(UICollisionBehavior*)behavior beganContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(id <NSCopying>)identifier atPoint:(CGPoint)p {
    
     UIView *view = (UIView *)item;
     if (view.tag == 101 && !fishFirstColl) {
-
         self.fish.hidden = YES;
         fishFirstColl = YES;
         
         //第一个水滴
         if (dropView == nil) {
-            dropView= [[UIView alloc]initWithFrame:CGRectZero];
+            dropView = [[UIView alloc]initWithFrame:CGRectZero];
             [self addSubview:dropView];
             dropView.backgroundColor = [UIColor colorWithRed:0 green:0.722 blue:1 alpha:1];
         }
@@ -269,7 +260,5 @@
     }
     
 }
-
-
 
 @end

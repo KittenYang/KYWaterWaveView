@@ -23,11 +23,11 @@
 /**
  *  Start waving
  */
--(void) wave;
+- (void)wave;
 
 /**
  *  Stop waving
  */
--(void) stop;
+- (void)stop;
 
 @end
